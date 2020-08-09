@@ -7,7 +7,8 @@ class GameManager:
 
     def __init__(self):
         self.game_modes: List[GameModeI] = [AddTest()]
-        self.select_game_mode()
+        while True:
+            self.test(self.select_game_mode())
 
     def select_game_mode(self) -> GameModeI:
         for i, x in enumerate(self.game_modes):
@@ -37,7 +38,11 @@ class GameManager:
                 continue
 
     def test(self, game: GameModeI):
-        pass
+        q = game.get_question(self.get_difficulty())
+        if self.get_num(q.question + "\n") == q.answer:
+            print("RIGHT!")
+        else:
+            print(f"WRONG. the answer is {q.answer}")
 
     def get_difficulty(self) -> Difficulty:
         options = {
@@ -46,7 +51,6 @@ class GameManager:
         "hard": Difficulty.HARD
         }
         option = self.get_option(list(options.keys()))
-
         return options[option]
 
     def get_option(self, options):
@@ -61,6 +65,4 @@ class GameManager:
         for i, option in enumerate(options):
             print(i, "for", option)
 
-print(type(Difficulty.HARD))
-print(type(Difficulty))
 GameManager()
