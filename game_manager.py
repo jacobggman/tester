@@ -29,7 +29,7 @@ class GameManager:
             MultiplyTest()
         ]
 
-        self.tests_option: List[Tuple[TestI, str]] = [   ]
+        self.tests_option: List[Tuple[TestI, str]] = []
 
         for test in tests:
             self.tests_option.append((test, test.get_description()))
@@ -93,13 +93,15 @@ class GameManager:
         self.print_options([msg for _, msg in options])
         return options[UserInput.get_option_index(options)][0]
 
-    def check_right(self, user_answer, answer):
+    @staticmethod
+    def check_right(user_answer, answer):
         if user_answer == str(answer):
             print("RIGHT!")
         else:
             print(f"WRONG. the answer is '{answer}'")
 
-    def add_record(self, time_to_answer, user_answer, question, difficulty) -> Record:
+    @staticmethod
+    def add_record(time_to_answer, user_answer, question, difficulty) -> Record:
         record = Record()
         record.time = time_to_answer
         record.answer = user_answer
