@@ -1,6 +1,6 @@
 from typing import List
 from game_modeI import GameModeI
-from add_test import AddTest
+from tests.add import AddTest
 from difficulty import Difficulty
 from user_input import UserInput
 
