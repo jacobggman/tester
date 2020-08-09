@@ -10,12 +10,9 @@ from tests_objects.division import DivisionTest
 from tests_objects.multiply import MultiplyTest
 
 # todo
-# fix record print
-# count only right answers
-# right / wrong ratio
 # add difficulty option to all
-# make record in his oun file
-# make sure that have record
+# make different screen for stats
+# are you sure to delete history
 # make function shorts
 # rename and vars
 # play!
@@ -37,7 +34,8 @@ class GameManager:
             self.worst_time,
             self.history,
             self.average_time,
-            self.clear_history
+            self.clear_history,
+            self.right_wrong,
         ]
 
         self.init_tests_id()
@@ -66,16 +64,22 @@ class GameManager:
     def clear_history(self, game: TestI):
         self.stats.clear_test(game.test_id)
 
+    def right_wrong(self, game: TestI):
+        print(round(self.stats.get_right_wrong_ratio(game.test_id), 2))
+
     def is_user_exit(self) -> bool:
         selected_test = self.select_test()
 
-        options = ["test", "best_time", "worst_time", "history", "average_time", "clear"]
+        options = ["test", "best_time", "worst_time", "history", "average_time", "clear", "right, wrong ratio "]
         self.print_options(options)
         user_index = UserInput.get_option_index(self.test_option)
 
         func = self.test_option[user_index]
 
-        func(selected_test)
+        try:
+            func(selected_test)
+        except (FileNotFoundError, IndexError):
+            print("Not have any history")
 
         return not self.run
 

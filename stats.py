@@ -41,18 +41,36 @@ class Stats:
 
         return records
 
+    def get_right_record(self, test_id):
+        return [x for x in self.get_records(test_id) if x.answer == x.right_answer]
+
+    def get_right_wrong_ratio(self, test_id: int) -> float:
+        right = 0
+        total = 0
+
+        for x in self.get_records(test_id):
+            total += 1
+            if x.answer == x.right_answer:
+                right += 1
+
+        if total == 0:
+            return 0
+
+        return right / total
+
+
     def get_sorted_records(self, test_id: int):
         records = self.get_records(test_id)
         records.sort(key=lambda x: x.time)
         return records
 
     def get_worst_speed(self, test_id: int) -> Record:
-        return self.get_sorted_records(test_id)[-1]
+        return self.get_right_record(test_id)[-1]
 
     def get_best_speed(self, test_id: int) -> Record:
-        return self.get_sorted_records(test_id)[0]
+        return self.get_right_record(test_id)[0]
 
     def get_average_speed(self, test_id: int) -> float:
-        records = self.get_records(test_id)
+        records = self.get_right_record(test_id)
         times = [x.time for x in records]
         return sum(times) / len(times)
