@@ -1,6 +1,6 @@
 import time
 from typing import List
-from game_modeI import GameModeI
+from game_modeI import TestI
 from difficulty import Difficulty
 from user_input import UserInput
 from tests.add import AddTest
@@ -8,30 +8,35 @@ from tests.less import LessTest
 from tests.division import DivisionTest
 from tests.multiply import MultiplyTest
 # todo
-# check time
 # stats and save best score
 
 
 class GameManager:
 
     def __init__(self):
-        self.game_modes: List[GameModeI] = [
+        self.tests_modes: List[TestI] = [
             AddTest(),
             LessTest(),
             DivisionTest(),
             MultiplyTest()
         ]
 
+        self.init_tests_id()
+
+    def init_tests_id(self):
+        for i, x in enumerate(self.tests_modes):
+            x.test_id = i
+
     def make_test(self):
         return self.test(self.select_game_mode())
 
-    def select_game_mode(self) -> GameModeI:
+    def select_game_mode(self) -> TestI:
 
-        options = [x.get_description() for x in self.game_modes]
+        options = [x.get_description() for x in self.tests_modes]
         self.print_options(options)
-        return self.game_modes[UserInput.get_option_index(options)]
+        return self.tests_modes[UserInput.get_option_index(options)]
 
-    def test(self, game: GameModeI):
+    def test(self, game: TestI):
         difficulty = self.get_difficulty()
 
         while True:

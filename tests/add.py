@@ -3,7 +3,7 @@ from difficulty import Difficulty
 from question import Question
 
 
-class AddTest(game_modeI.GameModeI):
+class AddTest(game_modeI.TestI):
 
     def get_description(self) -> str:
         return "Positive plus"

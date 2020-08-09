@@ -2,7 +2,8 @@ import game_modeI
 from difficulty import Difficulty
 from question import Question
 
-class MultiplyTest(game_modeI.GameModeI):
+
+class MultiplyTest(game_modeI.TestI):
 
     def get_description(self) -> str:
         return "Positive multiply"

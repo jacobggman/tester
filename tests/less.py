@@ -3,7 +3,7 @@ from difficulty import Difficulty
 from question import Question
 
 
-class LessTest(game_modeI.GameModeI):
+class LessTest(game_modeI.TestI):
 
     def get_description(self) -> str:
         return "Positive less"

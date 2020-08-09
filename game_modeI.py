@@ -4,7 +4,8 @@ from question import Question
 from generator import Generator
 
 
-class GameModeI:
+class TestI:
+    test_id: int
 
     def get_description(self) -> str:
         pass
@@ -14,7 +15,7 @@ class GameModeI:
 
     @staticmethod
     def generate_numbers(difficulty) -> Tuple[int, int]:
-        num_of_digits = GameModeI.get_num_digits(difficulty)
+        num_of_digits = TestI.get_num_digits(difficulty)
         first_num = Generator.positive_num(num_of_digits)
         second_num = Generator.positive_num(num_of_digits)
         return first_num, second_num
