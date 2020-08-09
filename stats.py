@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import pickle
 from difficulty import Difficulty
 
+
 @dataclass
 class Record:
 
@@ -23,7 +24,8 @@ class Stats:
         pickle.dump(record, f)
         f.close()
 
-    def get_file_name(self, test_id: int):
+    @staticmethod
+    def get_file_name(test_id: int):
         return "test" + str(test_id) + ".p"
 
     def reset_all(self, tests_num: int):
@@ -31,7 +33,11 @@ class Stats:
             file_name = self.get_file_name(x)
             self.clear_file(file_name)
 
-    def clear_file(self, file_name):
+    def clear_test(self, test_id: int):
+        self.clear_file(self.get_file_name(test_id))
+
+    @staticmethod
+    def clear_file(file_name):
         open(file_name, 'w').close()
 
     def get_records(self, test_id) -> List[Record]:

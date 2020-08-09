@@ -12,11 +12,10 @@ from tests.multiply import MultiplyTest
 # todo
 # add and fix clear
 # fix history
-# add difficulty option to all
 # fix record print
-# count only right answer
+# count only right answers
 # right / wrong ratio
-# better
+# add difficulty option to all
 # make record in his oun file
 # make sure that have record
 # make function shorts
@@ -39,7 +38,8 @@ class GameManager:
             self.best_time,
             self.worst_time,
             self.history,
-            self.average_time
+            self.average_time,
+            self.clear_history
         ]
 
         self.init_tests_id()
@@ -64,10 +64,13 @@ class GameManager:
     def average_time(self, game: TestI):
         print(self.stats.get_average_speed(game.test_id))
 
+    def clear_history(self, game: TestI):
+        self.stats.clear_test(game.test_id)
+
     def is_user_exit(self) -> bool:
         selected_test = self.select_test()
 
-        options = ["test", "best_time", "worst_time", "history", "average_time"]
+        options = ["test", "best_time", "worst_time", "history", "average_time", "clear"]
         self.print_options(options)
         user_index = UserInput.get_option_index(self.test_option)
 
