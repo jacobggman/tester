@@ -1,11 +1,13 @@
+import time
 from typing import List
 from game_modeI import GameModeI
-from tests.add import AddTest
 from difficulty import Difficulty
 from user_input import UserInput
-
+from tests.add import AddTest
+from tests.less import LessTest
+from tests.division import DivisionTest
+from tests.multiply import MultiplyTest
 # todo
-# add more game mode
 # check time
 # stats and save best score
 
@@ -13,7 +15,12 @@ from user_input import UserInput
 class GameManager:
 
     def __init__(self):
-        self.game_modes: List[GameModeI] = [AddTest()]
+        self.game_modes: List[GameModeI] = [
+            AddTest(),
+            LessTest(),
+            DivisionTest(),
+            MultiplyTest()
+        ]
 
     def make_test(self):
         return self.test(self.select_game_mode())
@@ -26,14 +33,17 @@ class GameManager:
 
     def test(self, game: GameModeI):
         difficulty = self.get_difficulty()
+
         while True:
             question = game.get_question(difficulty)
-            user_answer = UserInput.get_num(question.question + "\n")
-            if user_answer == question.answer:
+            time_before = time.time()
+            user_answer = input(question.question + "\n")
+            time_to_answer = time.time() - time_before
+            if user_answer == str(question.answer):
                 print("RIGHT!")
             else:
-                print(f"WRONG. the answer is {question.answer}")
-
+                print(f"WRONG. the answer is '{question.answer}'")
+            print(f"time take for answering: {round(time_to_answer, 2)} seconds")
             keep_asking = UserInput.get_yes_or_not("do you want to continue?: ")
 
             if not keep_asking:
