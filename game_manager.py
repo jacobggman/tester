@@ -4,10 +4,10 @@ from game_modeI import TestI
 from difficulty import Difficulty
 from user_input import UserInput
 from stats import Stats, Record
-from tests.add import AddTest
-from tests.less import LessTest
-from tests.division import DivisionTest
-from tests.multiply import MultiplyTest
+from tests_objects.add import AddTest
+from tests_objects.less import LessTest
+from tests_objects.division import DivisionTest
+from tests_objects.multiply import MultiplyTest
 
 # todo
 # fix record print
@@ -57,7 +57,8 @@ class GameManager:
         print(self.stats.get_worst_speed(game.test_id))
 
     def history(self, game: TestI):
-        print(self.stats.get_records(game.test_id))
+        for r in self.stats.get_records(game.test_id):
+            print(r)
 
     def average_time(self, game: TestI):
         print(self.stats.get_average_speed(game.test_id), "secedes")
@@ -102,7 +103,7 @@ class GameManager:
             record.time = time_to_answer
             record.answer = user_answer
             record.right_answer = str(question.answer)
-            record.question = question
+            record.question = question.question
             record.difficulty = difficulty
             self.stats.save(record, game.test_id)
             keep_asking = UserInput.get_yes_or_not("do you want to continue?: ")

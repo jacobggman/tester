@@ -1,21 +1,6 @@
 from typing import List
-from dataclasses import dataclass
 import pickle
-from difficulty import Difficulty
-
-
-@dataclass
-class Record:
-
-    def __init__(self):
-        pass
-
-    right_answer: str
-    answer: str
-    question: str
-    time: float
-    difficulty: Difficulty
-
+from record import Record
 
 class Stats:
     def save(self, record: Record, test_id: int):
