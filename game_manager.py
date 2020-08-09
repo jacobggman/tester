@@ -1,5 +1,5 @@
 import time
-from typing import List, Callable
+from typing import List, Callable, Tuple
 from game_modeI import TestI
 from difficulty import Difficulty
 from user_input import UserInput
@@ -21,21 +21,27 @@ from tests_objects.multiply import MultiplyTest
 class GameManager:
 
     def __init__(self):
-        self.tests_modes: List[TestI] = [
+
+        tests = [
             AddTest(),
             LessTest(),
             DivisionTest(),
             MultiplyTest()
         ]
 
-        self.test_option: List[Callable[[TestI], None]] = [
-            self.test,
-            self.best_time,
-            self.worst_time,
-            self.history,
-            self.average_time,
-            self.clear_history,
-            self.right_wrong,
+        self.tests_option: List[Tuple[TestI, str]] = [   ]
+
+        for test in tests:
+            self.tests_option.append((test, test.get_description()))
+
+        self.options_in_test: List[Tuple[Callable[[TestI], None], str]] = [
+            (self.test, "test"),
+            (self.best_time, "best_time"),
+            (self.worst_time, "worst_time"),
+            (self.history, "history"),
+            (self.average_time, "average_time"),
+            (self.clear_history, "clear"),
+            (self.right_wrong, "right, wrong ratio "),
         ]
 
         self.init_tests_id()
@@ -45,8 +51,9 @@ class GameManager:
         self.run = True
 
     def init_tests_id(self):
-        for i, x in enumerate(self.tests_modes):
-            x.test_id = i
+        for i, value_tuple in enumerate(self.tests_option):
+            test_object = value_tuple[0]
+            test_object.test_id = i
 
     def best_time(self, game: TestI):
         print(self.stats.get_best_speed(game.test_id))
@@ -70,11 +77,7 @@ class GameManager:
     def is_user_exit(self) -> bool:
         selected_test = self.select_test()
 
-        options = ["test", "best_time", "worst_time", "history", "average_time", "clear", "right, wrong ratio "]
-        self.print_options(options)
-        user_index = UserInput.get_option_index(self.test_option)
-
-        func = self.test_option[user_index]
+        func = self.user_select(self.options_in_test)
 
         try:
             func(selected_test)
@@ -84,49 +87,64 @@ class GameManager:
         return not self.run
 
     def select_test(self) -> TestI:
+        return self.user_select(self.tests_option)
 
-        options = [x.get_description() for x in self.tests_modes]
-        self.print_options(options)
-        return self.tests_modes[UserInput.get_option_index(options)]
+    def user_select(self, options: List[Tuple[any, str]]) -> any:
+        self.print_options([msg for _, msg in options])
+        return options[UserInput.get_option_index(options)][0]
+
+    def check_right(self, user_answer, answer):
+        if user_answer == str(answer):
+            print("RIGHT!")
+        else:
+            print(f"WRONG. the answer is '{answer}'")
+
+    def add_record(self, time_to_answer, user_answer, question, difficulty) -> Record:
+        record = Record()
+        record.time = time_to_answer
+        record.answer = user_answer
+        record.right_answer = str(question.answer)
+        record.question = question.question
+        record.difficulty = difficulty
+        return record
+
+    def handle_user_answer(self, question):
+        time_before = time.time()
+        user_answer = input(question.question + "\n")
+        time_to_answer = time.time() - time_before
+
+        self.check_right(user_answer, question.answer)
+
+        print(f"time take for answering: {round(time_to_answer, 2)} seconds")
+
+        return user_answer, time_to_answer
 
     def test(self, game: TestI):
         difficulty = self.get_difficulty()
 
         while True:
             question = game.get_question(difficulty)
-            time_before = time.time()
-            user_answer = input(question.question + "\n")
-            time_to_answer = time.time() - time_before
-            if user_answer == str(question.answer):
-                print("RIGHT!")
-            else:
-                print(f"WRONG. the answer is '{question.answer}'")
-            print(f"time take for answering: {round(time_to_answer, 2)} seconds")
 
-            record = Record()
-            record.time = time_to_answer
-            record.answer = user_answer
-            record.right_answer = str(question.answer)
-            record.question = question.question
-            record.difficulty = difficulty
+            user_answer, time_to_answer = self.handle_user_answer(question)
+
+            record = self.add_record(time_to_answer, user_answer, question, difficulty)
+
             self.stats.save(record, game.test_id)
+
             keep_asking = UserInput.get_yes_or_not("do you want to continue?: ")
 
             if not keep_asking:
                 return
 
     def get_difficulty(self) -> Difficulty:
-        options = {
-            "easy": Difficulty.EASY,
-            "medium": Difficulty.MEDIUM,
-            "hard": Difficulty.HARD
-        }
+        difficulty_options = [
+            (Difficulty.EASY, "easy"),
+            (Difficulty.MEDIUM, "medium"),
+            (Difficulty.HARD, "hard")
+        ]
 
-        self.print_options(options)
-        select_index = UserInput.get_option_index(options.keys())
-        return options[list(options)[select_index]]
+        return self.user_select(difficulty_options)
 
-    # todo better select and print options
     @staticmethod
     def print_options(options):
         for i, option in enumerate(options):

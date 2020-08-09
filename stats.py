@@ -58,7 +58,6 @@ class Stats:
 
         return right / total
 
-
     def get_sorted_records(self, test_id: int):
         records = self.get_records(test_id)
         records.sort(key=lambda x: x.time)
