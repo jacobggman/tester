@@ -3,9 +3,9 @@ from game_modeI import GameModeI
 from add_test import AddTest
 from difficulty import Difficulty
 from user_input import UserInput
+
 # todo
 # add more game mode
-# better input
 # check time
 # stats and save best score
 
@@ -14,8 +14,9 @@ class GameManager:
 
     def __init__(self):
         self.game_modes: List[GameModeI] = [AddTest()]
-        while True:
-            self.test(self.select_game_mode())
+
+    def make_test(self):
+        return self.test(self.select_game_mode())
 
     def select_game_mode(self) -> GameModeI:
 
@@ -52,6 +53,3 @@ class GameManager:
     def print_options(self, options):
         for i, option in enumerate(options):
             print(i, "for", option)
-
-
-GameManager()
