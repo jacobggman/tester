@@ -1,4 +1,7 @@
 
+YES_CHARS = ("y", "1")
+NO_CHARS = ("n", "0")
+
 class UserInput:
 
     @staticmethod
@@ -37,7 +40,7 @@ class UserInput:
             if len(user_input) == 0:
                 return True
             first_letter_input = user_input[0].lower()
-            if first_letter_input in ("y", "1"):
+            if first_letter_input in YES_CHARS:
                 return True
-            if first_letter_input in ("n", "0"):
+            if first_letter_input in NO_CHARS:
                 return False
