@@ -50,6 +50,7 @@ class GameManager:
         select_index = UserInput.get_option_index(options.keys())
         return options[list(options)[select_index]]
 
-    def print_options(self, options):
+    @staticmethod
+    def print_options(options):
         for i, option in enumerate(options):
             print(i, "for", option)
