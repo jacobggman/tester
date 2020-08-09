@@ -26,9 +26,9 @@ class AddTest(game_modeI.GameModeI):
 
     @staticmethod
     def get_num_digits(difficulty: Difficulty) -> int:
-        if difficulty.EASY:
+        if difficulty == difficulty.EASY:
             return 1
-        if difficulty.MEDIUM:
+        if difficulty == difficulty.MEDIUM:
             return 3
-        if difficulty.HARD:
+        if difficulty == difficulty.HARD:
             return 7
