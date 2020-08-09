@@ -2,6 +2,13 @@ from typing import List
 from game_modeI import GameModeI
 from add_test import AddTest
 from difficulty import Difficulty
+from user_input import UserInput
+# todo
+# add more game mode
+# better input
+# check time
+# stats and save best score
+
 
 class GameManager:
 
@@ -11,58 +18,40 @@ class GameManager:
             self.test(self.select_game_mode())
 
     def select_game_mode(self) -> GameModeI:
-        for i, x in enumerate(self.game_modes):
-            print(i, "for", x.get_description())
 
-        num_game_modes = range(len(self.game_modes))
-
-        select_index = self.input_in_range(num_game_modes)
-        return self.game_modes[select_index]
-
-    def input_in_range(self, between: range) -> int:
-        while True:
-            msg = f"enter number between {between.start} and {between.stop - 1}: "
-            try:
-                num_as_input = self.get_num(msg)
-                if num_as_input in between:
-                    return num_as_input
-            except ValueError:
-                continue
-
-    def get_num(self, msg):
-        while True:
-            try:
-                num_as_input = int(input(msg))
-                return num_as_input
-            except ValueError:
-                continue
+        options = [x.get_description() for x in self.game_modes]
+        self.print_options(options)
+        return self.game_modes[UserInput.get_option_index(options)]
 
     def test(self, game: GameModeI):
-        q = game.get_question(self.get_difficulty())
-        if self.get_num(q.question + "\n") == q.answer:
-            print("RIGHT!")
-        else:
-            print(f"WRONG. the answer is {q.answer}")
+        difficulty = self.get_difficulty()
+        while True:
+            question = game.get_question(difficulty)
+            user_answer = UserInput.get_num(question.question + "\n")
+            if user_answer == question.answer:
+                print("RIGHT!")
+            else:
+                print(f"WRONG. the answer is {question.answer}")
+
+            keep_asking = UserInput.get_yes_or_not("do you want to continue?: ")
+
+            if not keep_asking:
+                return
 
     def get_difficulty(self) -> Difficulty:
         options = {
-        "easy": Difficulty.EASY,
-        "medium": Difficulty.MEDIUM,
-        "hard": Difficulty.HARD
+            "easy": Difficulty.EASY,
+            "medium": Difficulty.MEDIUM,
+            "hard": Difficulty.HARD
         }
-        option = self.get_option(list(options.keys()))
-        return options[option]
 
-    def get_option(self, options):
         self.print_options(options)
-
-        num_game_modes = range(len(options))
-
-        select_index = self.input_in_range(num_game_modes)
-        return options[select_index]
+        select_index = UserInput.get_option_index(options.keys())
+        return options[list(options)[select_index]]
 
     def print_options(self, options):
         for i, option in enumerate(options):
             print(i, "for", option)
+
 
 GameManager()
