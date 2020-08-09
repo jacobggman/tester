@@ -20,7 +20,7 @@ class Record:
 class Stats:
     def save(self, record: Record, test_id: int):
         file_name = self.get_file_name(test_id)
-        f = open(file_name, 'wb')
+        f = open(file_name, 'ab')
         pickle.dump(record, f)
         f.close()
 

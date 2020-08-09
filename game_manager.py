@@ -10,8 +10,6 @@ from tests.division import DivisionTest
 from tests.multiply import MultiplyTest
 
 # todo
-# add and fix clear
-# fix history
 # fix record print
 # count only right answers
 # right / wrong ratio
@@ -59,10 +57,10 @@ class GameManager:
         print(self.stats.get_worst_speed(game.test_id))
 
     def history(self, game: TestI):
-        print(self.stats.get_records(game.test_id)[::-1])
+        print(self.stats.get_records(game.test_id))
 
     def average_time(self, game: TestI):
-        print(self.stats.get_average_speed(game.test_id))
+        print(self.stats.get_average_speed(game.test_id), "secedes")
 
     def clear_history(self, game: TestI):
         self.stats.clear_test(game.test_id)
