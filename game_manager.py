@@ -8,6 +8,7 @@ from tests_objects.add import AddTest
 from tests_objects.less import LessTest
 from tests_objects.division import DivisionTest
 from tests_objects.multiply import MultiplyTest
+from tests_objects.percentage import PercentageTest
 
 # todo
 # add difficulty option to all
@@ -23,7 +24,8 @@ class GameManager:
             AddTest(),
             LessTest(),
             DivisionTest(),
-            MultiplyTest()
+            MultiplyTest(),
+            PercentageTest(),
         ]
 
         self.tests_option: List[Tuple[TestI, str]] = []
