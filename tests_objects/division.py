@@ -11,8 +11,9 @@ class DivisionTest(game_modeI.TestI):
     def get_divide_no_remainder_numbers(self, difficulty):
         while True:
             numbers = self.generate_numbers(difficulty)
-            if numbers[0] % numbers[1] == 0:
-                return numbers
+            big, small = max(*numbers), min(*numbers)
+            if big % small == 0:
+                return big, small
 
     def get_question(self, difficulty: Difficulty) -> Question:
         numbers = self.get_divide_no_remainder_numbers(difficulty)
