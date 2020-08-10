@@ -12,9 +12,6 @@ from tests_objects.multiply import MultiplyTest
 # todo
 # add difficulty option to all
 # make different screen for stats
-# are you sure to delete history
-# make function shorts
-# rename and vars
 # play!
 
 
@@ -69,7 +66,8 @@ class GameManager:
         print(self.stats.get_average_speed(game.test_id), "secedes")
 
     def clear_history(self, game: TestI):
-        self.stats.clear_test(game.test_id)
+        if UserInput.get_yes_or_not("Are you sure?: "):
+            self.stats.clear_test(game.test_id)
 
     def right_wrong(self, game: TestI):
         print(round(self.stats.get_right_wrong_ratio(game.test_id), 2))
@@ -100,16 +98,6 @@ class GameManager:
         else:
             print(f"WRONG. the answer is '{answer}'")
 
-    @staticmethod
-    def add_record(time_to_answer, user_answer, question, difficulty) -> Record:
-        record = Record()
-        record.time = time_to_answer
-        record.answer = user_answer
-        record.right_answer = str(question.answer)
-        record.question = question.question
-        record.difficulty = difficulty
-        return record
-
     def handle_user_answer(self, question):
         time_before = time.time()
         user_answer = input(question.question + "\n")
@@ -129,7 +117,7 @@ class GameManager:
 
             user_answer, time_to_answer = self.handle_user_answer(question)
 
-            record = self.add_record(time_to_answer, user_answer, question, difficulty)
+            record = Record(time_to_answer, user_answer, question, difficulty)
 
             self.stats.save(record, game.test_id)
 
