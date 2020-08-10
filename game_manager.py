@@ -14,7 +14,7 @@ from tests_objects.percentage import PercentageTest
 # add difficulty option to all
 # make different screen for stats
 # play!
-
+# separate the input and output
 
 class GameManager:
 
@@ -98,7 +98,7 @@ class GameManager:
         if user_answer == str(answer):
             print("RIGHT!")
         else:
-            print(f"WRONG. the answer is '{answer}'")
+            print(f"WRONG. The answer is '{answer}'")
 
     def handle_user_answer(self, question):
         time_before = time.time()
@@ -107,7 +107,7 @@ class GameManager:
 
         self.check_right(user_answer, question.answer)
 
-        print(f"time take for answering: {round(time_to_answer, 2)} seconds")
+        print(f"Time take for answering: {round(time_to_answer, 2)} seconds")
 
         return user_answer, time_to_answer
 
@@ -123,7 +123,7 @@ class GameManager:
 
             self.stats.save(record, game.test_id)
 
-            keep_asking = UserInput.get_yes_or_not("do you want to continue?: ")
+            keep_asking = UserInput.get_yes_or_not("Do you want to continue?: ")
 
             if not keep_asking:
                 return
