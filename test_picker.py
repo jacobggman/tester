@@ -22,5 +22,13 @@ class TestPicker:
         for test in tests:
             self.tests_option.append((test, test.get_description()))
 
+        self.init_tests_id()
+
+    def init_tests_id(self):
+        tests_tuple = self.get_test_option()
+        for i, value_tuple in enumerate(tests_tuple):
+            test_object, description = value_tuple
+            test_object.test_id = i
+
     def get_test_option(self):
         return self.tests_option

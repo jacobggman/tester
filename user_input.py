@@ -43,5 +43,5 @@ class UserInput:
             if first_letter_input in self.NO_CHARS:
                 return False
 
-    def get_answer(self, question):
+    def get_answer(self, question) -> str:
         return input(question + "\n")
