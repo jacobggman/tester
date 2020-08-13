@@ -1,7 +1,4 @@
-
-
 class UserInput:
-
     def __init__(self):
         self.YES_CHARS = ("y", "1")
         self.NO_CHARS = ("n", "0")
@@ -18,12 +15,9 @@ class UserInput:
     def get_range(self, between: range) -> int:
         while True:
             msg = f"Enter number between {between.start} and {between.stop - 1}: "
-            try:
-                num_as_input = self.get_num(msg)
-                if num_as_input in between:
-                    return num_as_input
-            except ValueError:
-                continue
+            num_as_input = self.get_num(msg)
+            if num_as_input in between:
+                return num_as_input
 
     def get_option_index(self, options: iter) -> int:
         option_num = len(options)
@@ -35,12 +29,16 @@ class UserInput:
     def get_yes_or_not(self, msg) -> bool:
         while True:
             user_input = input(msg)
+
             if len(user_input) == 0:
                 return True
-            first_letter_input = user_input[0].lower()
-            if first_letter_input in self.YES_CHARS:
+
+            first_letter_input = user_input[0]
+            first_char_lower = first_letter_input.lower()
+
+            if first_char_lower in self.YES_CHARS:
                 return True
-            if first_letter_input in self.NO_CHARS:
+            if first_char_lower in self.NO_CHARS:
                 return False
 
     def get_answer(self, question) -> str:
