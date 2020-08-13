@@ -4,34 +4,22 @@ from game_modeI import TestI
 from difficulty import Difficulty
 from user_input import UserInput
 from stats import Stats, Record
-from tests_objects.add import AddTest
-from tests_objects.less import LessTest
-from tests_objects.division import DivisionTest
-from tests_objects.multiply import MultiplyTest
-from tests_objects.percentage import PercentageTest
+from test_picker import TestPicker
 
 # todo
 # add difficulty option to all
 # make different screen for stats
 # play!
 # separate the input and output
+# test picker
+# input output classes
+
 
 class GameManager:
 
     def __init__(self):
 
-        tests = [
-            AddTest(),
-            LessTest(),
-            DivisionTest(),
-            MultiplyTest(),
-            PercentageTest(),
-        ]
-
-        self.tests_option: List[Tuple[TestI, str]] = []
-
-        for test in tests:
-            self.tests_option.append((test, test.get_description()))
+        self.test_picker = TestPicker()
 
         self.options_in_test: List[Tuple[Callable[[TestI], None], str]] = [
             (self.test, "test"),
@@ -50,7 +38,7 @@ class GameManager:
         self.run = True
 
     def init_tests_id(self):
-        for i, value_tuple in enumerate(self.tests_option):
+        for i, value_tuple in enumerate(self.test_picker.get_test_option()):
             test_object = value_tuple[0]
             test_object.test_id = i
 
@@ -87,7 +75,7 @@ class GameManager:
         return not self.run
 
     def select_test(self) -> TestI:
-        return self.user_select(self.tests_option)
+        return self.user_select(self.test_picker.get_test_option())
 
     def user_select(self, options: List[Tuple[any, str]]) -> any:
         self.print_options([msg for _, msg in options])
