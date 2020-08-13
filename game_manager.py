@@ -2,10 +2,9 @@ import time
 from typing import List, Callable, Tuple
 from game_modeI import TestI
 from difficulty import Difficulty
-from user_input import UserInput
 from stats import Stats, Record
 from test_picker import TestPicker
-from user_output import UserOutput
+
 
 # todo
 # add difficulty option to all
@@ -16,12 +15,12 @@ from user_output import UserOutput
 
 class GameManager:
 
-    def __init__(self):
+    def __init__(self, input_class, output_class):
 
         self.test_picker = TestPicker()
 
-        self.output = UserOutput()
-        self.input = UserInput()
+        self.input = input_class
+        self.output = output_class
 
         self.options_in_test: List[Tuple[Callable[[TestI], None], str]] = [
             (self.test, "test"),
