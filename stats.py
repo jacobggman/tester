@@ -20,7 +20,8 @@ class Stats:
             self.clear_file(file_name)
 
     def clear_test(self, test_id: int):
-        self.clear_file(self.get_file_name(test_id))
+        file_name = self.get_file_name(test_id)
+        self.clear_file(file_name)
 
     @staticmethod
     def clear_file(file_name):
@@ -65,12 +66,14 @@ class Stats:
         return records
 
     def get_worst_speed(self, test_id: int) -> Record:
-        return self.get_sorted_records(test_id)[-1]
+        records = self.get_sorted_records(test_id)
+        return records[-1]
 
     def get_best_speed(self, test_id: int) -> Record:
-        return self.get_sorted_records(test_id)[0]
+        records = self.get_sorted_records(test_id)
+        return records[0]
 
     def get_average_speed(self, test_id: int) -> float:
         records = self.get_right_record(test_id)
-        times = [x.time for x in records]
+        times = [record.time for record in records]
         return sum(times) / len(times)

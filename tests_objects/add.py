@@ -1,9 +1,9 @@
-import game_modeI
+import test_interface
 from difficulty import Difficulty
 from question import Question
 
 
-class AddTest(game_modeI.TestI):
+class AddTest(test_interface.TestI):
 
     def get_description(self) -> str:
         return "Positive plus"

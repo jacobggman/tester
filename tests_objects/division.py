@@ -1,9 +1,9 @@
-import game_modeI
+import test_interface
 from difficulty import Difficulty
 from question import Question
 
 
-class DivisionTest(game_modeI.TestI):
+class DivisionTest(test_interface.TestI):
 
     def get_description(self) -> str:
         return "Positive division"

@@ -1,6 +1,6 @@
 import time
 from typing import List, Callable, Tuple
-from game_modeI import TestI
+from test_interface import TestI
 from difficulty import Difficulty
 from stats import Stats, Record
 from test_picker import TestPicker

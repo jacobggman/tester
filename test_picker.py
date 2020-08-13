@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from game_modeI import TestI
+from test_interface import TestI
 from tests_objects.add import AddTest
 from tests_objects.less import LessTest
 from tests_objects.division import DivisionTest
