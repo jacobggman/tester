@@ -20,7 +20,8 @@ class GameManager:
 
         self.test_picker = TestPicker()
 
-        self.out = UserOutput()
+        self.output = UserOutput()
+        self.input = UserInput()
 
         self.options_in_test: List[Tuple[Callable[[TestI], None], str]] = [
             (self.test, "test"),
@@ -45,27 +46,27 @@ class GameManager:
 
     def best_time(self, game: TestI):
         record = self.stats.get_best_speed(game.test_id)
-        self.out.record(record)
+        self.output.record(record)
 
     def worst_time(self, game: TestI):
         record = self.stats.get_worst_speed(game.test_id)
-        self.out.record(record)
+        self.output.record(record)
 
     def history(self, game: TestI):
         records = self.stats.get_records(game.test_id)
-        self.out.records(records)
+        self.output.records(records)
 
     def average_time(self, game: TestI):
         average = self.stats.get_average_speed(game.test_id)
-        self.out.float(average, "Seconds")
+        self.output.float(average, "Seconds")
 
     def clear_history(self, game: TestI):
-        if UserInput.get_yes_or_not("Are you sure?: "):
+        if self.input.get_yes_or_not("Are you sure?: "):
             self.stats.clear_test(game.test_id)
 
     def right_wrong(self, game: TestI):
         ratio = self.stats.get_right_wrong_ratio(game.test_id)
-        self.out.float(ratio, "Right Ratio")
+        self.output.float(ratio, "Right Ratio")
 
     def is_user_exit(self) -> bool:
         selected_test = self.select_test()
@@ -75,7 +76,7 @@ class GameManager:
         try:
             func(selected_test)
         except (FileNotFoundError, IndexError):
-            self.out.no_history()
+            self.output.no_history()
 
         return not self.run
 
@@ -83,17 +84,17 @@ class GameManager:
         return self.user_select(self.test_picker.get_test_option())
 
     def user_select(self, options: List[Tuple[any, str]]) -> any:
-        self.out.options([msg for _, msg in options])
-        return options[UserInput.get_option_index(options)][0]
+        self.output.options([msg for _, msg in options])
+        return options[self.input.get_option_index(options)][0]
 
     def handle_user_answer(self, question):
         time_before = time.time()
-        user_answer = UserInput.get_answer(question.question)
+        user_answer = self.input.get_answer(question.question)
         time_to_answer = time.time() - time_before
 
-        self.out.is_right(user_answer, question.answer)
+        self.output.is_right(user_answer, question.answer)
 
-        self.out.time_take(time_to_answer)
+        self.output.time_take(time_to_answer)
 
         return user_answer, time_to_answer
 
@@ -109,7 +110,7 @@ class GameManager:
 
             self.stats.save(record, game.test_id)
 
-            keep_asking = UserInput.get_yes_or_not("Do you want to continue?: ")
+            keep_asking = self.input.get_yes_or_not("Do you want to continue?: ")
 
             if not keep_asking:
                 return
