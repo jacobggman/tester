@@ -44,3 +44,7 @@ class UserInput:
                 return True
             if first_letter_input in NO_CHARS:
                 return False
+
+    @staticmethod
+    def get_answer(question):
+        return input(question + "\n")

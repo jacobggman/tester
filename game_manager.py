@@ -5,14 +5,13 @@ from difficulty import Difficulty
 from user_input import UserInput
 from stats import Stats, Record
 from test_picker import TestPicker
+from user_output import UserOutput
 
 # todo
 # add difficulty option to all
 # make different screen for stats
 # play!
 # separate the input and output
-# test picker
-# input output classes
 
 
 class GameManager:
@@ -20,6 +19,8 @@ class GameManager:
     def __init__(self):
 
         self.test_picker = TestPicker()
+
+        self.out = UserOutput()
 
         self.options_in_test: List[Tuple[Callable[[TestI], None], str]] = [
             (self.test, "test"),
@@ -43,24 +44,28 @@ class GameManager:
             test_object.test_id = i
 
     def best_time(self, game: TestI):
-        print(self.stats.get_best_speed(game.test_id))
+        record = self.stats.get_best_speed(game.test_id)
+        self.out.record(record)
 
     def worst_time(self, game: TestI):
-        print(self.stats.get_worst_speed(game.test_id))
+        record = self.stats.get_worst_speed(game.test_id)
+        self.out.record(record)
 
     def history(self, game: TestI):
-        for r in self.stats.get_records(game.test_id):
-            print(r)
+        records = self.stats.get_records(game.test_id)
+        self.out.records(records)
 
     def average_time(self, game: TestI):
-        print(self.stats.get_average_speed(game.test_id), "secedes")
+        average = self.stats.get_average_speed(game.test_id)
+        self.out.float(average, "Seconds")
 
     def clear_history(self, game: TestI):
         if UserInput.get_yes_or_not("Are you sure?: "):
             self.stats.clear_test(game.test_id)
 
     def right_wrong(self, game: TestI):
-        print(round(self.stats.get_right_wrong_ratio(game.test_id), 2))
+        ratio = self.stats.get_right_wrong_ratio(game.test_id)
+        self.out.float(ratio, "Right Ratio")
 
     def is_user_exit(self) -> bool:
         selected_test = self.select_test()
@@ -70,7 +75,7 @@ class GameManager:
         try:
             func(selected_test)
         except (FileNotFoundError, IndexError):
-            print("Not have any history")
+            self.out.no_history()
 
         return not self.run
 
@@ -78,24 +83,17 @@ class GameManager:
         return self.user_select(self.test_picker.get_test_option())
 
     def user_select(self, options: List[Tuple[any, str]]) -> any:
-        self.print_options([msg for _, msg in options])
+        self.out.options([msg for _, msg in options])
         return options[UserInput.get_option_index(options)][0]
-
-    @staticmethod
-    def check_right(user_answer, answer):
-        if user_answer == str(answer):
-            print("RIGHT!")
-        else:
-            print(f"WRONG. The answer is '{answer}'")
 
     def handle_user_answer(self, question):
         time_before = time.time()
-        user_answer = input(question.question + "\n")
+        user_answer = UserInput.get_answer(question.question)
         time_to_answer = time.time() - time_before
 
-        self.check_right(user_answer, question.answer)
+        self.out.is_right(user_answer, question.answer)
 
-        print(f"Time take for answering: {round(time_to_answer, 2)} seconds")
+        self.out.time_take(time_to_answer)
 
         return user_answer, time_to_answer
 
@@ -124,8 +122,3 @@ class GameManager:
         ]
 
         return self.user_select(difficulty_options)
-
-    @staticmethod
-    def print_options(options):
-        for i, option in enumerate(options):
-            print(i, "for", option)
